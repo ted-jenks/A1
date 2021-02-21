@@ -454,6 +454,9 @@ def EmptyArrayTest():
     None.
 
     '''
+    global dataMasked
+    global dataRead
+    
     
     data = np.zeros([1000,1000])
     mask = np.zeros([1000,1000])   
@@ -463,8 +466,7 @@ def EmptyArrayTest():
     print('EMPTY ARRAY TEST')
     print('________________')
     print('\n')
-    Vals, Mags = counter()     
-    print('hello')                                
+    Vals, Mags,  Xcoords, Ycoords, localBackgrounds, numpixelsArr = counter()                                   
     print(len(Vals), 'objects Detected')
     print('\n')
     print('\n')
@@ -480,6 +482,8 @@ def OnePixelTest():
     None.
 
     '''
+    global dataMasked
+    global dataRead
     
     data = np.zeros([1000,1000])
     mask = np.zeros([1000,1000])
@@ -489,7 +493,7 @@ def OnePixelTest():
     print('SINGLE PIXEL TEST')
     print('_________________')
     print('\n')
-    Vals, Mags = counter()
+    Vals, Mags,  Xcoords, Ycoords, localBackgrounds, numpixelsArr = counter()
     print(Vals)                                       
     print(len(Vals), 'objects Detected')
     print('\n')
@@ -548,6 +552,9 @@ def GaussBlob(arr, x,y,std):
 
 def GaussBlobTest():
     
+    global dataMasked
+    global dataRead
+    
     data = np.zeros([500,500])
     GaussBlob(data, 250, 250, 10)
     GaussBlob(data, 300, 50, 2)
@@ -566,7 +573,7 @@ def GaussBlobTest():
     print('GAUSSIAN BLOB TEST IMAGE')
     print('________________________')
     print('\n')
-    Vals, Mags = counter()
+    Vals, Mags,  Xcoords, Ycoords, localBackgrounds, numpixelsArr = counter()
     print(Vals)                                       
     print(len(Vals), 'objects Detected')
     print('\n')
@@ -654,7 +661,7 @@ def RunSmallImageTest1(method = 'variable',empty = 0.9, minpix = 1, aperture = 1
     
     SmallImageMask1()
     
-    Vals, Mags = counter(method,empty,minpix, aperture)
+    Vals, Mags,  Xcoords, Ycoords, localBackgrounds, numpixelsArr = counter(method,empty,minpix, aperture)
 
     MagPlot = []
     for i in range(len(Mags)):
@@ -733,7 +740,7 @@ def RunSmallImageTest2(method = 'variable',empty = 0.9, minpix = 1, aperture = 1
     
     SmallImageMask2()
     
-    Vals, Mags = counter(method, empty, minpix, aperture)
+    Vals, Mags,  Xcoords, Ycoords, localBackgrounds, numpixelsArr = counter(method, empty, minpix, aperture)
 
     MagPlot = []
     for i in range(len(Mags)):
