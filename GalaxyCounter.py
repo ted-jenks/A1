@@ -411,26 +411,26 @@ def counter(method = 'variable', empty = 0.9, minpix = 2, aperture = 13):
     global mu
     global sigma
     
-    ValueCatalogue = np.array([])   #array to hold pixel values of sources
-    MagCatalogue = np.array([])   #array to hold magnitude values of sources
-    Ycoords = np.array([])
-    Xcoords = np.array([])
-    numpixelsArr = np.array([])
-    localBackgrounds = np.array([])
+    ValueCatalogue = np.array([])   #Array to hold pixel values of sources
+    MagCatalogue = np.array([])     #Array to hold magnitude values of sources
+    Ycoords = np.array([])          #Array to hold y coordinates of sources
+    Xcoords = np.array([])          #Array to hold x coordinates of sources
+    numpixelsArr = np.array([])     #Array to hold number of pixels within the aperture used for each source
+    localBackgrounds = np.array([]) #Array to hold the local background for each source
 
     for i in range(1000000):
-        valueTotal,maxValue, maxI, maxJ, numpixels,localBackground = findMax(method,empty,minpix, aperture)      #run findMax
-        Value = valueTotal - (localBackground * numpixels)                  #adjust for background
-        if Value > 0:
-            ValueCatalogue = np.append(ValueCatalogue, [Value])     #store value
+        valueTotal,maxValue, maxI, maxJ, numpixels,localBackground = findMax(method,empty,minpix, aperture) #Runs findMax
+        Value = valueTotal - (localBackground * numpixels)      #Adjusts value for background
+        if Value > 0:   #Ensures value is positive (Small bright objects can sometimes have a total aperture value less than background) 
+            ValueCatalogue = np.append(ValueCatalogue, [Value])     #Stores the information in the respective arrays
             Ycoords = np.append(Ycoords,maxI)
             Xcoords = np.append(Xcoords,maxJ)
             numpixelsArr = np.append(numpixelsArr,numpixels)
             localBackgrounds = np.append(localBackgrounds, localBackground)
-            m_uncorrected = -2.5*np.log10(Value) #the magnitudes without adding the zeropoint
-            m = zeropoint + m_uncorrected #the magnitudes after adding the zeropoint
+            m_uncorrected = -2.5*np.log10(Value)        #Converts counts to magnitude
+            m = zeropoint + m_uncorrected               #Corrects magnitude for thezeropoint
             MagCatalogue = np.append(MagCatalogue, m)
-        if maxValue <= mu + 3* sigma:
+        if maxValue <= mu + 3* sigma:       #Stops counting objects once pixel with maximum value is less than cutoff
             break
     return ValueCatalogue, MagCatalogue, Xcoords, Ycoords, localBackgrounds, numpixelsArr
 
