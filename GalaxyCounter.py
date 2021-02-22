@@ -87,8 +87,8 @@ def drawRect(arr,x, tl, br):
 
     '''
     global counter
-    for i in range(tl[0],br[0]):            #Iterates over x coordinate values within rectangle 
-        for j in range(tl[1],br[1]):        #Iterates over y coordinate values qithin rectangle CHECK X AND Y RIGHT WAY ROUND HERE!!!
+    for i in range(tl[0],br[0]):            #Iterates over y coordinate values within rectangle 
+        for j in range(tl[1],br[1]):        #Iterates over x coordinate values qithin rectangle
             arr[i][j] = x                   #Sets the points within the rectangle to the value x (not coordinate x)
     return
 
@@ -121,7 +121,7 @@ def circleMask(arr, x, i,j,apertureDiameter):
                                                         
     for k in range(apertureDiameter):
         currentx += 1                                   #Iterates through the x coordinates
-        currenty = j - (apertureDiameter-1)/2 - 1       #WHY IS THIS REPEATED!!!
+        currenty = j - (apertureDiameter-1)/2 - 1       #Resets currenty for each iteration
         for h in range(apertureDiameter):
             currenty += 1                               #Iterates through the y coordinates
             if round(np.sqrt((currentx-i)**2+(currenty-j)**2)) <= (apertureDiameter-1)/2: #Checks if point is within the circle
