@@ -13,13 +13,13 @@ Read File
 _________________________________________________________________________________________________
 '''
 
-hdulist = fits.open("mosaic.fits")
+hdulist = fits.open("mosaic.fits")          #Open the image file
 
-header = hdulist[0].header
-zeropoint = hdulist[0].header["MAGZPT"]
-data = hdulist[0].data
-dataMasked = np.array([])
-dataRead = np.array([])
+header = hdulist[0].header                  #Open the image file header
+zeropoint = hdulist[0].header["MAGZPT"]     #Read the zero point value 
+data = hdulist[0].data                      #Read the count data 
+dataMasked = np.array([])                   #Create an array for the masked data
+dataRead = np.array([])                     #Create an array for the masked data filled with background
 
 
 def dataReset():
