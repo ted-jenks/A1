@@ -120,11 +120,11 @@ def circleMask(arr, x, i,j,apertureDiameter):
     currenty = j - (apertureDiameter-1)/2 - 1           #Sets starting y coordinate to the bottom side of the square surrounding the circle
                                                         
     for k in range(apertureDiameter):
-        currentx += 1                                   #Iterates through the x coordinates
+        currentx += 1                                   #Iterates through x coordinates
         currenty = j - (apertureDiameter-1)/2 - 1       #Resets currenty for each iteration
         for h in range(apertureDiameter):
-            currenty += 1                               #Iterates through the y coordinates
-            if round(np.sqrt((currentx-i)**2+(currenty-j)**2)) <= (apertureDiameter-1)/2: #Checks if point is within the circle
+            currenty += 1                               #Iterates through y coordinates
+            if round(np.sqrt((currentx-i)**2+(currenty-j)**2)) <= (apertureDiameter-1)/2: #Checks if point is within the aperture
                 arr[int(currentx)][int(currenty)] = x   #Sets the values within the circlular aperture to x (not coordinate x)
                 
     return
@@ -233,19 +233,19 @@ def inAperture(i,j,apertureDiameter):
 
     '''
     
-    currentx = i - (apertureDiameter-1)/2 - 1       #start sweep in bottom left corner of square
-    currenty = j - (apertureDiameter-1)/2 - 1
-    xcoords = np.array([])                          #array to hold x coords
-    ycoords = np.array([])                          #array to hold y coords
+    currentx = i - (apertureDiameter-1)/2 - 1       #Sets starting x coordinate to left side of the square surrounding the circle
+    currenty = j - (apertureDiameter-1)/2 - 1       #Sets starting y coordinate to bottom side of the square surrounding the circle
+    xcoords = np.array([])                          #Creates array to hold x coordinates
+    ycoords = np.array([])                          #Creates array to hold y coordinates
     for k in range(apertureDiameter):
-        currentx += 1                               #iterate through x
+        currentx += 1                               #Iterate through x coordinates
         currenty = j - (apertureDiameter-1)/2 - 1
         for h in range(apertureDiameter):
-            currenty += 1                           #iterate through y
-            if round(np.sqrt((currentx-i)**2+(currenty-j)**2)) <= (apertureDiameter-1)/2: #check if cel; is within aperture
-                xcoords = np.append(xcoords, currentx)
-                ycoords = np.append(ycoords, currenty)
-    numpixels = len(xcoords)                        #count the number of pixels
+            currenty += 1                           #Iterate through y coordinates
+            if round(np.sqrt((currentx-i)**2+(currenty-j)**2)) <= (apertureDiameter-1)/2: #Checks if point is within the aperture
+                xcoords = np.append(xcoords, currentx)     
+                ycoords = np.append(ycoords, currenty)     
+    numpixels = len(xcoords)                        #Counts the number of pixels within the aperture
     return xcoords,ycoords,numpixels   
 
 
@@ -273,19 +273,19 @@ def drawRing(i,j,apertureDiameter):
 
     '''
     
-    currentx = i - (apertureDiameter-1)/2 - 1       #start sweep in bottom left corner of square
-    currenty = j - (apertureDiameter-1)/2 - 1
-    xcoords = np.array([])                          #array to hold x coords
-    ycoords = np.array([])
+    currentx = i - (apertureDiameter-1)/2 - 1       #Sets starting x coordinate to left side of the square surrounding the circle
+    currenty = j - (apertureDiameter-1)/2 - 1       #Sets starting y coordinate to bottom side of the square surrounding the circle
+    xcoords = np.array([])                          #Creates array to hold x coordinates
+    ycoords = np.array([])                          #Creates array to hold y coordinates
     for k in range(apertureDiameter):
-        currentx += 1                               #iterate through x
+        currentx += 1                               #Iterate through x coordinates
         currenty = j - (apertureDiameter-1)/2 - 1
         for h in range(apertureDiameter):
-            currenty += 1                           #iterate through y
-            if round(np.sqrt((currentx-i)**2+(currenty-j)**2)) == (apertureDiameter-1)/2: #check if cel; is within aperture
+            currenty += 1                           #Iterate through y coordinates
+            if round(np.sqrt((currentx-i)**2+(currenty-j)**2)) == (apertureDiameter-1)/2: #Checks if point is on the ring
                 xcoords = np.append(xcoords, currentx)
                 ycoords = np.append(ycoords, currenty)
-    numpixels = len(xcoords)
+    numpixels = len(xcoords)                        #Counts the number of pixels on the ring
     return xcoords,ycoords,numpixels
 
 
