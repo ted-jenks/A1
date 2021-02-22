@@ -333,31 +333,31 @@ def findMax(method, empty, minpix, aperture):
     maxI = xarr[0]                                  #Records x coordinate of pixel with maximum count 
     maxJ = yarr[0]                                  #Records y coordinate of pixel with maximum count
     
-    if method == 'variable':                        #Variable aperture method
+    if method == 'variable':             #Variable aperture method
         for i in range(100):
-            pixelCounter = 0                        #Variable to hold number of pixels checked
-            apertureDiameter += 2                   #
+            pixelCounter = 0             #Variable to hold number of pixels checked
+            apertureDiameter += 2                   
             xcoords,ycoords,numpixels = drawRing(maxI,maxJ,apertureDiameter)
             for k in range(numpixels):
-                if xcoords[k] < np.shape(dataRead)[0] and ycoords[k] < np.shape(dataRead)[1]:
-                    if xcoords[k] >= 0 and ycoords[k] >= 0:
-                        if dataRead[int(xcoords[k])][int(ycoords[k])] <= mu + 3* sigma:
+                if xcoords[k] < np.shape(dataRead)[0] and ycoords[k] < np.shape(dataRead)[1]:   #Checks if aperture pixel is within Image (To avoid aperture going over the edge)
+                    if xcoords[k] >= 0 and ycoords[k] >= 0:                                     
+                        if dataRead[int(xcoords[k])][int(ycoords[k])] <= mu + 3* sigma:         #Checks if pixel has value less than mu+3sigma
                             pixelCounter+=1
-            if numpixels * empty <= pixelCounter:
+            if numpixels * empty <= pixelCounter:           #Checks if fraction of ring occupied is sifficient to set aperture
                 break
     
-    if method == 'fixed':
+    if method == 'fixed':               #Fixed aperture method
         apertureDiameter = aperture
                     
-    xcoords,ycoords,numpixels = inAperture(maxI,maxJ,apertureDiameter)                  #find pixels within aperture around i,j
+    xcoords,ycoords,numpixels = inAperture(maxI,maxJ,apertureDiameter)                  #Finds pixels within aperture around i,j
     for k in range(numpixels):
-        if xcoords[k] < np.shape(dataRead)[0] and ycoords[k] < np.shape(dataRead)[1]:
+        if xcoords[k] < np.shape(dataRead)[0] and ycoords[k] < np.shape(dataRead)[1]:   #Checks if aperture pixel is within Image (To avoid aperture going over the edge)
             if xcoords[k] >= 0 and ycoords[k] >= 0:
-                valueTotal += dataRead[int(xcoords[k])][int(ycoords[k])]                #find total aperture value
-                dataMasked[int(xcoords[k])][int(ycoords[k])] = np.ma.masked             #update mask array
+                valueTotal += dataRead[int(xcoords[k])][int(ycoords[k])]                #Adds to total aperture value
+                dataMasked[int(xcoords[k])][int(ycoords[k])] = np.ma.masked             #Masks pixels that have been counted
                 
             
-    backgroundDiameter = apertureDiameter + 16
+    backgroundDiameter = apertureDiameter + 16          #Sets the size of the local background aperture
     xcoordsBack,ycoordsBack,numpixelsBack = inAperture(maxI,maxJ,backgroundDiameter)
     backgroundValue = 0
     backCount = 0
@@ -367,7 +367,7 @@ def findMax(method, empty, minpix, aperture):
                 if dataRead[int(xcoordsBack[k])][int(ycoordsBack[k])] <  mu + 3* sigma:
                     backgroundValue += dataRead[int(xcoordsBack[k])][int(ycoordsBack[k])]
                     backCount+=1
-    if backgroundValue == 0:
+    if backgroundValue == 0:        #If the local background is less than 
         localBackground = mu
     else:
         localBackground = backgroundValue/backCount
