@@ -189,7 +189,12 @@ def maskData():
     circleMask(mask, 1, 1960, 2490, 101)
     circleMask(mask, 1, 1433, 2096, 137)
     circleMask(mask, 1, 3297, 2260, 160)
-
+    
+    circleMask(mask, 1, 575, 1775, 90)
+    circleMask(mask, 1, 829, 1871, 90)
+    circleMask(mask, 1, 286, 1799, 90)
+    circleMask(mask, 1, 286, 1799, 90)
+    
     circleMask(mask, 1, 1125, 2500, 99)
     circleMask(mask, 1, 581, 1771, 43)
     circleMask(mask, 1, 467, 1601, 59)
