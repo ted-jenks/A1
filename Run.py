@@ -16,34 +16,39 @@ Read File
 _________________________________________________________________________________________________
 '''
 
-hdulist = fits.open("mosaic.fits")
+hdulist = fits.open("mosaic.fits")      #Open the image file
 
-header = hdulist[0].header
-zeropoint = hdulist[0].header["MAGZPT"]
-data = hdulist[0].data
-TotalAngle = 0.04509811
+header = hdulist[0].header              #Open the image file header
+zeropoint = hdulist[0].header["MAGZPT"] #Read the zero point value 
+data = hdulist[0].data                  #Read the count data 
+TotalAngle = 0.04509811                 #The solid angle (in deg^2) subtented by the data we used (ie solid angle of image - solid angle of masking)
 
 # #%%
 # '''
 # _________________________________________________________________________________________________
 
 # Background Data
+# This section takes all the data with values between 3300 and 3600 (to avoid bright foreground objects and dim unreliable readings)
+# and plots a histogram of the number of pixels with different values. It then fits a gaussian to this histogram and returns the 
+# mean and standard deviation. 
+# This can then be used for setting masked pixel values and a cutoff. 
+# 
 # _________________________________________________________________________________________________
 # '''
 
 # print('BACKGROUND DATA')
 # print('_______________')
 # print('\n')
-# flatdata = data.flatten()
-# snippeddata = []
+# flatdata = data.flatten()                             #Flattens data into a 1d array
+# snippeddata = []                                      
 # for i in range(len(flatdata)):
 #     if flatdata[i] >= 3300 and flatdata[i] <= 3600:
-#         snippeddata.append(flatdata[i])
+#         snippeddata.append(flatdata[i])               #Adds data with values between 3300 and 3600 to snippeddata 
 
 # plt.figure()
 # plt.grid()
-# BINS = 100                                        #no. bins for hist
-# counts, bins, bars = plt.hist(snippeddata, BINS, label = 'Pixel Vales')       #flatten array and plot hist
+# BINS = 100                                            #Number of histogram bins
+# counts, bins, bars = plt.hist(snippeddata, BINS, label = 'Pixel Vales')       #Plots histogram
 # plt.xlim(3300,3600)
 # plt.title('Histogram of Pixel Values')
 # plt.xlabel('Pixel Value')
@@ -80,8 +85,8 @@ TotalAngle = 0.04509811
 # plt.text(3475,0.8e6,'Mean = 3419.2 +/- 0.2',bbox={'facecolor': 'white', 'alpha': 1, 'pad': 10})
 # plt.text(3475,0.6e6,'Std = 12.2 +/- 0.2',bbox={'facecolor': 'white', 'alpha': 1, 'pad': 10})
 
-# print('Gaussian Mean:', mu, '+/-', error[0])
-# print('Gaussian Stdev:', sigma, '+/-', error[1])
+# print('Gaussian Mean:', mu, '+/-', error[0])          #Prints the mean mu
+# print('Gaussian Stdev:', sigma, '+/-', error[1])      #Prints the standard deviation sigma
 
 # #%%
 # '''
@@ -92,9 +97,9 @@ TotalAngle = 0.04509811
 # '''
 
 # plt.figure()
-# plt.imshow(data, cmap='gray')                   #view the image
+# plt.imshow(data, cmap='gray')                   #Shows the image
 # plt.title('Image')
-# plt.colorbar()                                  #add colour bar
+# plt.colorbar()                                  #Adds colour bar
 
 # plt.figure()
 # plt.imshow(data, cmap='gray', norm=LogNorm(vmin = 3000, vmax = 4000))  #view image with logarithmic brightness scaling
@@ -109,9 +114,9 @@ Data Collection
 _________________________________________________________________________________________________
 '''
 
-def fit(x,a,c):
+def fit(x,a,c):         #Returns a straight line to fit onto a logarithmic graph
     '''
-    Fit function.
+    Fit function.   
 
     Parameters
     ----------
@@ -130,7 +135,7 @@ def fit(x,a,c):
     '''
     return 10**(a*x+c)
 
-def fitStraight(x,m,c):
+def fitStraight(x,m,c):     #Returns a straight line fit for a linear graph
     '''
     Straight line fit.
 
@@ -188,13 +193,13 @@ def Run(method = 'variable', empty = 0.9, minpix = 2, aperture = 13):
     MagPlot = []
     for i in range(len(Mags)):
         if Mags[i]>0 and Mags[i]<=17:
-            MagPlot.append(Mags[i])
+            MagPlot.append(Mags[i])                       #Adds magnitude data to MagPlot to be plotted
             
-    BINS = 15                                             #no. bins for hist
-    values, bins = np.histogram(Mags, BINS)
-    cumulative = np.cumsum(values) 
+    BINS = 15                                             #Number of histogram bins
+    values, bins = np.histogram(Mags, BINS)               #Sorts magnitudes into histogram bins
+    cumulative = np.cumsum(values)                        #Cumulative count of number of objects with magnitude
     
-    BINSfit = 18                                          #no. bins for hist
+    BINSfit = 18                                          #Number of histogram bins
     valuesfit, binsfit = np.histogram(MagPlot, BINSfit)
     cumulativefit = np.cumsum(valuesfit) 
     cumulativefit = cumulativefit[4:]
@@ -204,7 +209,7 @@ def Run(method = 'variable', empty = 0.9, minpix = 2, aperture = 13):
     error = np.sqrt(np.diag(pcov))
     
     number = len(Mags)
-    
+    #The following 2 lines write the object catalogue and plotted data to an ascii file
     ascii.write([Xcoords, Ycoords,Vals,Mags,localBackgrounds,numpixels], 'ObjectCatalogue.dat', names=['x', 'y','Pixel Value','Magnitude','Local Background', 'Size of Source (Total Pixel Count)'],delimiter = '|', overwrite=True, format='fixed_width')
     ascii.write([bins[:-1]+(bins[1]-bins[0])/2,cumulative,np.sqrt(cumulative)], 'PlotData.dat', names=['Magnitude','Cumulative Count','Error'], overwrite=True, format='fixed_width')
     return (bins, cumulative, popt, error, number, Mags,numpixels)
@@ -224,7 +229,7 @@ ________________________________________________________________________________
 # for i in range(len(Mags)):
 #     if Mags[i]>0 and Mags[i]<=17:
 #         MagPlot.append(Mags[i])
-# BINSfit = 25                                          #no. bins for hist
+# BINSfit = 25                                          #Number of histogram bins
 # valuesfit, binsfit = np.histogram(MagPlot, BINSfit)
 # cumulativefit = np.cumsum(valuesfit)
 # cumulativefit = cumulativefit[6:]
@@ -242,7 +247,7 @@ ________________________________________________________________________________
 # plt.yscale('log',nonposy = 'clip')
 
 
-#Variable Aperture Galaxy Count
+#Variable Aperture Galaxy Count plot
 plt.figure()
 x = np.linspace(7,26,1000)
 plt.plot(x, fit(x,popt[0], popt[1]),'--', label = 'Fit',color = 'grey')
@@ -271,7 +276,7 @@ bins = 100
 plt.hist(Mags, bins)
 plt.yscale('log',nonposy = 'clip')
 
-#Size of Source Vs Magnitude
+#Size of Source Vs Magnitude plot
 plt.figure()
 plt.plot(Mags, np.log10(numpixels),'x', label = 'Data',color = 'grey')
 popt, pcov = curve_fit(fitStraight, Mags, np.log10(numpixels), maxfev=10000)
