@@ -458,16 +458,16 @@ def EmptyArrayTest():
     global dataRead
     
     
-    data = np.zeros([1000,1000])
+    data = np.zeros([1000,1000])        #Creates empty data array
     mask = np.zeros([1000,1000])   
     dataMasked = np.ma.masked_array(data,mask)
-    dataRead = dataMasked.filled(mu)  
+    dataRead = dataMasked.filled(mu)    #Fills masked points with mu      
      
     print('EMPTY ARRAY TEST')
     print('________________')
     print('\n')
-    Vals, Mags,  Xcoords, Ycoords, localBackgrounds, numpixelsArr = counter()                                   
-    print(len(Vals), 'objects Detected')
+    Vals, Mags,  Xcoords, Ycoords, localBackgrounds, numpixelsArr = counter()   #Runs counter                               
+    print(len(Vals), 'objects Detected')    #Prints number of objects detected (should be 0)
     print('\n')
     print('\n')
     
@@ -487,15 +487,15 @@ def OnePixelTest():
     
     data = np.zeros([1000,1000])
     mask = np.zeros([1000,1000])
-    data[500][500] = 1000000   
+    data[500][500] = 1000000        #Creates a single expremely bright pixel
     dataMasked = np.ma.masked_array(data,mask)
     dataRead = dataMasked.filled(mu)   
     print('SINGLE PIXEL TEST')
     print('_________________')
     print('\n')
-    Vals, Mags,  Xcoords, Ycoords, localBackgrounds, numpixelsArr = counter()
+    Vals, Mags,  Xcoords, Ycoords, localBackgrounds, numpixelsArr = counter()   #Runs counter
     print(Vals)                                       
-    print(len(Vals), 'objects Detected')
+    print(len(Vals), 'objects Detected')    #Prints number of objects detected (should be 1)
     print('\n')
     print('\n')
     
