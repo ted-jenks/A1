@@ -364,16 +364,16 @@ def findMax(method, empty, minpix, aperture):
     for k in range(numpixelsBack):
         if xcoordsBack[k] < np.shape(dataRead)[0] and ycoordsBack[k] < np.shape(dataRead)[1]:
             if xcoordsBack[k] >= 0 and ycoordsBack[k] >= 0:
-                if dataRead[int(xcoordsBack[k])][int(ycoordsBack[k])] <  mu + 3* sigma:
+                if dataRead[int(xcoordsBack[k])][int(ycoordsBack[k])] <  mu + 3* sigma:     #Checks if pixel value is less than cutoff
                     backgroundValue += dataRead[int(xcoordsBack[k])][int(ycoordsBack[k])]
                     backCount+=1
-    if backgroundValue == 0:        #If the local background is less than 
-        localBackground = mu
+    if backgroundValue == 0:        #Case where none of the pixels were less than cuttoff or whithin the image
+        localBackground = mu        #Sets local background to the global background for this case
     else:
-        localBackground = backgroundValue/backCount
-    dataRead = dataMasked.filled(localBackground)
+        localBackground = backgroundValue/backCount     #Sets local background to average of pixel values within the background aperture (excluding previous cases)
+    dataRead = dataMasked.filled(localBackground)       #Updates data with masking 
     
-    if numpixels <= minpix:
+    if numpixels <= minpix:     #Avoids counting pixels within an aperture less than the minimum aperture size
         valueTotal = 0
 
     return (valueTotal,maxValue, maxI, maxJ, numpixels,localBackground)
