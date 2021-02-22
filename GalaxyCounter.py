@@ -657,9 +657,9 @@ def RunSmallImageTest1(method = 'variable',empty = 0.9, minpix = 1, aperture = 1
 
     '''
     
-    dataReset()
+    dataReset()         #Resets data to original image data
     
-    SmallImageMask1()
+    SmallImageMask1()   #Masks image to small section
     
     Vals, Mags,  Xcoords, Ycoords, localBackgrounds, numpixelsArr = counter(method,empty,minpix, aperture)
 
@@ -669,8 +669,8 @@ def RunSmallImageTest1(method = 'variable',empty = 0.9, minpix = 1, aperture = 1
             MagPlot.append(Mags[i])         #Adds magnitude data to MagPlot to be plotted
             
     BINS = 30                                             #Number of histogram bins
-    values, bins = np.histogram(Mags, BINS) 
-    cumulative = np.cumsum(values) 
+    values, bins = np.histogram(Mags, BINS)               #Sorts magnitudes into histogram bins
+    cumulative = np.cumsum(values)                        #Cumulative count of number of objects with magnitude
     
     BINSfit = 30                                          #Number of histogram bins
     valuesfit, binsfit = np.histogram(MagPlot, BINSfit)
@@ -748,8 +748,8 @@ def RunSmallImageTest2(method = 'variable',empty = 0.9, minpix = 1, aperture = 1
             MagPlot.append(Mags[i])          #Adds magnitude data to MagPlot to be plotted
             
     BINS = 30                                             #Number of histogram bins
-    values, bins = np.histogram(Mags, BINS)
-    cumulative = np.cumsum(values) 
+    values, bins = np.histogram(Mags, BINS)               #Sorts magnitudes into histogram bins
+    cumulative = np.cumsum(values)                        #Cumulative count of number of objects with magnitude
     
     BINSfit = 30                                          #Number of histogram bins
     valuesfit, binsfit = np.histogram(MagPlot, BINSfit)
