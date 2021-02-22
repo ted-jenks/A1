@@ -57,8 +57,8 @@ Background Data
 _________________________________________________________________________________________________
 '''
 
-mu = 3419.1978290249785         #these values are from the gaussian
-sigma = 12.231015056830977      #they have been hardcoded to avoid having to run it every time
+mu = 3419.1978290249785         #Mean of the gaussian from Run.py
+sigma = 12.231015056830977      #They are hardcoded to avoid having to run it every time
 
 #%%
 '''
