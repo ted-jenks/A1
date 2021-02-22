@@ -87,9 +87,9 @@ def drawRect(arr,x, tl, br):
 
     '''
     global counter
-    for i in range(tl[0],br[0]):
-        for j in range(tl[1],br[1]):
-            arr[i][j] = x
+    for i in range(tl[0],br[0]):            #Iterates over x coordinate values within rectangle 
+        for j in range(tl[1],br[1]):        #Iterates over y coordinate values qithin rectangle CHECK X AND Y RIGHT WAY ROUND HERE!!!
+            arr[i][j] = x                   #Sets the points within the rectangle to the value x (not coordinate x)
     return
 
 def circleMask(arr, x, i,j,apertureDiameter):
@@ -116,16 +116,16 @@ def circleMask(arr, x, i,j,apertureDiameter):
 
     NONE.
     '''
-    currentx = i - (apertureDiameter-1)/2 - 1       #start sweep in bottom left corner of square
-    currenty = j - (apertureDiameter-1)/2 - 1
-
+    currentx = i - (apertureDiameter-1)/2 - 1           #Sets starting x coordinate to left side of the square surrounding the circle
+    currenty = j - (apertureDiameter-1)/2 - 1           #Sets starting y coordinate to the bottom side of the square surrounding the circle
+                                                        
     for k in range(apertureDiameter):
-        currentx += 1                               #iterate through x
-        currenty = j - (apertureDiameter-1)/2 - 1
+        currentx += 1                                   #Iterates through the x coordinates
+        currenty = j - (apertureDiameter-1)/2 - 1       #WHY IS THIS REPEATED!!!
         for h in range(apertureDiameter):
-            currenty += 1                           #iterate through y
-            if round(np.sqrt((currentx-i)**2+(currenty-j)**2)) <= (apertureDiameter-1)/2: #check if cel; is within aperture
-                arr[int(currentx)][int(currenty)] = x
+            currenty += 1                               #Iterates through the y coordinates
+            if round(np.sqrt((currentx-i)**2+(currenty-j)**2)) <= (apertureDiameter-1)/2: #Checks if point is within the circle
+                arr[int(currentx)][int(currenty)] = x   #Sets the values within the circlular aperture to x (not coordinate x)
                 
     return
 
@@ -141,14 +141,14 @@ def maskData():
     global dataMasked
     global dataRead
    
-    mask = np.zeros([int(np.shape(data)[0]),int(np.shape(data)[1])])   #array to hold masked pixels
+    mask = np.zeros([int(np.shape(data)[0]),int(np.shape(data)[1])])   #Creates an array to hold the masked pixels (array of 0s)
    
-    drawRect(mask, 1, [0,0], [150,2570])                               #cropping
+    drawRect(mask, 1, [0,0], [150,2570])            #Crops the image edges
     drawRect(mask, 1, [0,0], [4611,150])
     drawRect(mask, 1, [0,2419], [4611,2570])
     drawRect(mask, 1, [4460,0], [4611,2570])
     
-    circleMask(mask, 1, 4095, 558, 90)
+    circleMask(mask, 1, 4095, 558, 90)              #Masks circular objects (foreground stars)                 
     circleMask(mask, 1, 3315, 785, 271)
     circleMask(mask, 1, 2775, 975, 191)
     circleMask(mask, 1, 2290, 901, 181)
@@ -164,16 +164,16 @@ def maskData():
     circleMask(mask, 1, 4399, 1310, 61)
                          
 
-    drawRect(mask, 1, [403,1000], [521,1726]) #bleeding 
-    drawRect(mask, 1, [475,993], [538,1046]) #bleeding 
-    drawRect(mask, 1, [295,988], [363,1749]) #bleeding 
-    drawRect(mask, 1, [209,1380], [274,1501]) #bleeding 
-    drawRect(mask, 1, [111,1278], [165,1557]) #bleeding 
+    drawRect(mask, 1, [403,1000], [521,1726])       #Masks bleeding lines from bright objects
+    drawRect(mask, 1, [475,993], [538,1046]) 
+    drawRect(mask, 1, [295,988], [363,1749])
+    drawRect(mask, 1, [209,1380], [274,1501]) 
+    drawRect(mask, 1, [111,1278], [165,1557]) 
 
     circleMask(mask, 1, 3930, 185, 63)
     circleMask(mask, 1, 4284, 65, 65)
 
-    drawRect(mask, 1, [0,1377], [4610,1480]) #Long line
+    drawRect(mask, 1, [0,1377], [4610,1480]) 
 
     circleMask(mask, 1, 4031, 1458, 77)
     circleMask(mask, 1, 3206, 1422, 575)
@@ -195,10 +195,10 @@ def maskData():
     circleMask(mask, 1, 467, 1601, 59)
     circleMask(mask, 1, 291, 1796, 65)   
 
-    dataMasked = np.ma.masked_array(data,mask)
+    dataMasked = np.ma.masked_array(data,mask)      #Holds an array of the data with a second array indicating the masked points
 
-    dataRead = dataMasked.filled(mu)
-
+    dataRead = dataMasked.filled(mu)                #Creates an array of the data with masked points containing mu
+    
     return
 
 #%%
