@@ -546,7 +546,7 @@ def GaussBlob(arr, x,y,std):
     for i in range(-100,100):
         for j in range(-100,100):
             dist = np.sqrt((i)**2 + (j)**2)
-            arr[x+i][y+j] = gauss(dist, 0, std,4e6)
+            arr[x+i][y+j] = gauss(dist, 0, std,4e6)     #Fills an array with values according to a gaussian centered on (x,y)
             
     return
 
@@ -556,7 +556,7 @@ def GaussBlobTest():
     global dataRead
     
     data = np.zeros([500,500])
-    GaussBlob(data, 250, 250, 10)
+    GaussBlob(data, 250, 250, 10)       #Place a number of gaussians in an empty array
     GaussBlob(data, 300, 50, 2)
     GaussBlob(data, 100, 300, 2)
     GaussBlob(data, 400, 400, 2)
@@ -566,7 +566,7 @@ def GaussBlobTest():
     dataRead = dataMasked.filled(mu) 
                     
     plt.figure()
-    plt.imshow(data, cmap='gray')                  
+    plt.imshow(data, cmap='gray')       #Display the image of the gaussians                  
     plt.title('Gaussian Blob Test Image')
     plt.colorbar()                                    
      
@@ -575,13 +575,13 @@ def GaussBlobTest():
     print('\n')
     Vals, Mags,  Xcoords, Ycoords, localBackgrounds, numpixelsArr = counter()
     print(Vals)                                       
-    print(len(Vals), 'objects Detected')
+    print(len(Vals), 'objects Detected')    #Print number of objects detected (should be 5 but varies depending on aperture)
     print('\n')
     print('\n')
     
     return
 
-def fit(x,a,c):
+def fit(x,a,c):     #Returns a straight line to fit onto a logarithmic graph
     '''
     Fit function.
 
@@ -614,9 +614,9 @@ def SmallImageMask1():
     global dataMasked
     global dataRead
     
-    mask = np.zeros([int(np.shape(data)[0]),int(np.shape(data)[1])])   #array to hold masked pixels
+    mask = np.zeros([int(np.shape(data)[0]),int(np.shape(data)[1])])   #Array to hold masked pixels
     
-    drawRect(mask, 1, [0,0], [339,2570])                               #cropping
+    drawRect(mask, 1, [0,0], [339,2570])                               #Cropping
     drawRect(mask, 1, [0,0], [4611,1847])
     drawRect(mask, 1, [0,2018], [4611,2570])
     drawRect(mask, 1, [552,0], [4611,2570])
@@ -664,15 +664,15 @@ def RunSmallImageTest1(method = 'variable',empty = 0.9, minpix = 1, aperture = 1
     Vals, Mags,  Xcoords, Ycoords, localBackgrounds, numpixelsArr = counter(method,empty,minpix, aperture)
 
     MagPlot = []
-    for i in range(len(Mags)):
+    for i in range(len(Mags)):          
         if Mags[i]>9 and Mags[i]<=17:
-            MagPlot.append(Mags[i])
+            MagPlot.append(Mags[i])         #Adds magnitude data to MagPlot to be plotted
             
-    BINS = 30                                             #no. bins for hist
-    values, bins = np.histogram(Mags, BINS)
+    BINS = 30                                             #Number of histogram bins
+    values, bins = np.histogram(Mags, BINS) 
     cumulative = np.cumsum(values) 
     
-    BINSfit = 30                                          #no. bins for hist
+    BINSfit = 30                                          #Number of histogram bins
     valuesfit, binsfit = np.histogram(MagPlot, BINSfit)
     cumulativefit = np.cumsum(valuesfit) 
     popt, pcov = curve_fit(fit, binsfit[:-1]+(binsfit[1]-binsfit[0])/2,cumulativefit, sigma = np.sqrt(cumulativefit), maxfev=10000, p0 = np.array([0.6, 2]))
@@ -693,9 +693,9 @@ def SmallImageMask2():
     global dataMasked
     global dataRead
     
-    mask = np.zeros([int(np.shape(data)[0]),int(np.shape(data)[1])])   #array to hold masked pixels
+    mask = np.zeros([int(np.shape(data)[0]),int(np.shape(data)[1])])   #Array to hold masked pixels
     
-    drawRect(mask, 1, [0,0], [1139,2570])                               #cropping
+    drawRect(mask, 1, [0,0], [1139,2570])                               #Cropping
     drawRect(mask, 1, [0,0], [4611,709])
     drawRect(mask, 1, [1261,0], [4611,2570])
     drawRect(mask, 1, [0,975], [4611,2570])
@@ -745,17 +745,17 @@ def RunSmallImageTest2(method = 'variable',empty = 0.9, minpix = 1, aperture = 1
     MagPlot = []
     for i in range(len(Mags)):
         if Mags[i]>9 and Mags[i]<=17:
-            MagPlot.append(Mags[i])
+            MagPlot.append(Mags[i])          #Adds magnitude data to MagPlot to be plotted
             
-    BINS = 30                                             #no. bins for hist
+    BINS = 30                                             #Number of histogram bins
     values, bins = np.histogram(Mags, BINS)
     cumulative = np.cumsum(values) 
     
-    BINSfit = 30                                          #no. bins for hist
+    BINSfit = 30                                          #Number of histogram bins
     valuesfit, binsfit = np.histogram(MagPlot, BINSfit)
     cumulativefit = np.cumsum(valuesfit) 
     popt, pcov = curve_fit(fit, binsfit[:-1]+(binsfit[1]-binsfit[0])/2,cumulativefit, sigma = np.sqrt(cumulativefit), maxfev=10000, p0 = np.array([0.6, 2]))
     error = np.sqrt(np.diag(pcov))
     
-    number = len(Mags)
+    number = len(Mags)      #Number of objects
     return (bins, cumulative, popt, error, number, dataMasked)
