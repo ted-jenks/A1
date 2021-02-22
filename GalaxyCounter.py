@@ -327,16 +327,16 @@ def findMax(method, empty, minpix, aperture):
     global mu
     
     apertureDiameter = -1
-    valueTotal = 0          #variable to hold the value within aperture
-    maxValue = np.max(dataRead)
-    xarr, yarr = np.where(dataRead == maxValue)
-    maxI = xarr[0]                                                                       #record x and y
-    maxJ = yarr[0]
+    valueTotal = 0                      #Variable to hold total count value within the aperture
+    maxValue = np.max(dataRead)         #The maximum count value in the image
+    xarr, yarr = np.where(dataRead == maxValue)     #Sets the coordinates of the maximum pixel
+    maxI = xarr[0]                                  #Records x coordinate of pixel with maximum count 
+    maxJ = yarr[0]                                  #Records y coordinate of pixel with maximum count
     
-    if method == 'variable':
+    if method == 'variable':                        #Variable aperture method
         for i in range(100):
-            pixelCounter = 0
-            apertureDiameter += 2
+            pixelCounter = 0                        #Variable to hold number of pixels checked
+            apertureDiameter += 2                   #
             xcoords,ycoords,numpixels = drawRing(maxI,maxJ,apertureDiameter)
             for k in range(numpixels):
                 if xcoords[k] < np.shape(dataRead)[0] and ycoords[k] < np.shape(dataRead)[1]:
