@@ -192,11 +192,11 @@ def Run(method = 'variable', empty = 0.9, minpix = 2, aperture = 13):
         if Mags[i]>0 and Mags[i]<=17:
             MagPlot.append(Mags[i])                       #Adds magnitude data to MagPlot to be plotted
             
-    BINS = 30                                             #no. bins for hist
+    BINS = 30                                             #Number of histogram bins
     values, bins = np.histogram(Mags, BINS)               #Sorts magnitudes into histogram bins
     cumulative = np.cumsum(values)                        #Cumulative count of number of objects with magnitude
     
-    BINSfit = 25                                          #no. bins for hist
+    BINSfit = 25                                          #Number of histogram bins
     valuesfit, binsfit = np.histogram(MagPlot, BINSfit)
     cumulativefit = np.cumsum(valuesfit) 
     cumulativefit = cumulativefit[8:]
